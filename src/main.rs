@@ -61,15 +61,15 @@ use std::io;
 
 fn read_input() -> Result<String, io::Error> {
     let mut input = String::new();
-    match io::stdin().read_line(&mut input) {
-        Err(err) => Err(err),
-        Ok(_) => Ok(input)
-    }
+    let result = io::stdin().read_line(&mut input)?;
+    Ok(input)
 }
 
 fn main() {
     match read_input() {
         Err(err) => print!("{}", err),
-        Ok(input) => calculator::evaluate(&input)
+        Ok(input) => {
+            let result = calculator::evaluate(&input);
+        }
     }
 }

@@ -10,25 +10,18 @@ pub struct NumberTokenizer;
 impl Tokenizer for NumberTokenizer {
     fn process(&self, input_iter: &mut Peekable<Chars>) -> ParseResult {
         let mut characters = String::new();
-        loop {
-            match input_iter.peek() {
-                None => break,
-                Some(&character) => {
-                    let _ = input_iter.next();
 
-                    if character.is_digit(10) {
-                        println!("char: {}", &character);
-                        characters.push(character);
-                    } else {
-                        break;
-                    }
-                }
+        while let Some(&character) = input_iter.peek() {
+            let _ = input_iter.next();
+
+            if character.is_digit(10) {
+                characters.push(character);
+            } else {
+                break;
             }
         }
 
-        match characters.parse::<i32>() {
-            Err(_) => Err(ParseError { error: String::from("ParseIntError") }),
-            Ok(number) => Ok(Token::Number(number))
-        }
+        let number = characters.parse::<i32>().map_err(|_| { ParseError::from("ParseIntError") })?;
+        Ok(Token::Number(number))
     }
 }

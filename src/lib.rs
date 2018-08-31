@@ -1,25 +1,31 @@
-// The calculator will accept String input and return a Result<i32, Error>
-// The calculator will own a lexical analyzer and a parser
-// The lexical analyzer will consume the input and forward its tokens to the parser
-// The parser will maintain an internal state of the world and use a parse table to process the inputs
+use std::fmt;
 
 mod lexer;
 
-pub fn evaluate(input: &String) {
-    let mut input_iter = input.trim().chars().peekable();
-    let input_iter_ref= &mut input_iter;
-    loop {
-        match input_iter_ref.peek() {
-            None => break,
-            Some(_) => {
-                match lexer::process(input_iter_ref) {
-                    Err(err) => {
-                        println!("{:?}", err);
-                        break
-                    },
-                    Ok(token) => {}
-                }
-            }
-        }
+#[derive(Debug)]
+pub struct EvalError {
+    error: String
+}
+
+impl EvalError {
+    pub fn from(error: &str) -> EvalError {
+        EvalError { error: String::from(error) }
     }
+}
+
+impl fmt::Display for EvalError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", &self.error)
+    }
+}
+
+pub fn evaluate(input: &String) -> Result<i32, EvalError> {
+    let mut input_iter = input.trim().chars().peekable();
+
+    while let Some(_) = input_iter.peek() {
+        let token = lexer::process(&mut input_iter).map_err(|_| { EvalError::from("Invalid token") })?;
+        println!("token: {:?}", &token);
+    }
+
+    Ok(0)
 }
