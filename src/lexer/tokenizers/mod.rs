@@ -1,6 +1,6 @@
-use std::str::Chars;
-use std::iter::Peekable;
 use lexer::ParseResult;
+use std::iter::Peekable;
+use std::str::Chars;
 
 pub trait Tokenizer {
     fn process(&self, input_iter: &mut Peekable<Chars>) -> ParseResult;

@@ -36,7 +36,6 @@ use std::io;
 // [5,6] <- *
 // [11] <- +
 
-
 // Two stacks
 // numbers, operators (binary, unary)
 // Parsing of strings

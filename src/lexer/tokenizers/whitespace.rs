@@ -1,6 +1,6 @@
-use std::str::Chars;
+use lexer::{tokenizers::Tokenizer, ParseError, ParseResult, Token};
 use std::iter::Peekable;
-use lexer::{Token, ParseError, ParseResult, tokenizers::Tokenizer};
+use std::str::Chars;
 
 pub struct WhitespaceTokenizer;
 

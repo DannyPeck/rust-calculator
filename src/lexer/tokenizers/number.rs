@@ -1,9 +1,9 @@
-use std::str::Chars;
-use std::iter::Peekable;
-use lexer::Token;
+use lexer::tokenizers::Tokenizer;
 use lexer::ParseError;
 use lexer::ParseResult;
-use lexer::tokenizers::Tokenizer;
+use lexer::Token;
+use std::iter::Peekable;
+use std::str::Chars;
 
 pub struct NumberTokenizer;
 
@@ -20,7 +20,9 @@ impl Tokenizer for NumberTokenizer {
             }
         }
 
-        let number = characters.parse::<i32>().map_err(|_| { ParseError::from("ParseIntError") })?;
+        let number = characters
+            .parse::<i32>()
+            .map_err(|_| ParseError::from("ParseIntError"))?;
         Ok(Token::Number(number))
     }
 }
