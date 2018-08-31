@@ -1,9 +1,9 @@
-use lexer::ParseResult;
+use lexer::Token;
 use std::iter::Peekable;
 use std::str::Chars;
 
 pub trait Tokenizer {
-    fn process(&self, input_iter: &mut Peekable<Chars>) -> ParseResult;
+    fn process(&self, input_iter: &mut Peekable<Chars>) -> Option<Token>;
 }
 
 pub mod number;

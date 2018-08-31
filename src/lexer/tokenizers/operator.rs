@@ -1,25 +1,26 @@
-use lexer::{tokenizers::Tokenizer, ParseError, ParseResult, Token};
+use lexer::{tokenizers::Tokenizer, Token};
 use std::iter::Peekable;
 use std::str::Chars;
 
 pub struct OperatorTokenizer;
 
 impl Tokenizer for OperatorTokenizer {
-    fn process(&self, input_iter: &mut Peekable<Chars>) -> ParseResult {
-        if let Some(&character) = input_iter.peek() {
-            let result = match character {
-                '+' => Ok(Token::Addition),
-                '-' => Ok(Token::Subtraction),
-                '/' => Ok(Token::Division),
-                '*' => Ok(Token::Multiplication),
-                _ => Err(ParseError::from("Not a supported operator")),
-            }?;
+    fn process(&self, input_iter: &mut Peekable<Chars>) -> Option<Token> {
+        match input_iter.peek() {
+            Some(&character) => {
+                let token = match character {
+                    '+' => Some(Token::Addition),
+                    '-' => Some(Token::Subtraction),
+                    '/' => Some(Token::Division),
+                    '*' => Some(Token::Multiplication),
+                    _ => None,
+                }?;
 
-            let _ = input_iter.next();
+                input_iter.next();
 
-            Ok(result)
-        } else {
-            Err(ParseError::from("End of input"))
+                Some(token)
+            },
+            None => None
         }
     }
 }
