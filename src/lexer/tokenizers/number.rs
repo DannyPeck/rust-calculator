@@ -18,9 +18,7 @@ impl Tokenizer for NumberTokenizer {
             }
         }
 
-        match characters.parse::<i32>().ok() {
-            Some(number) => Some(Token::Number(number)),
-            None => None,
-        }
+        let number = characters.parse::<i32>().ok()?;
+        Some(Token::Number(number))
     }
 }
