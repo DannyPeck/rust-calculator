@@ -8,4 +8,5 @@ pub trait Tokenizer {
 
 pub mod number;
 pub mod operator;
+pub mod parenthesis;
 pub mod whitespace;

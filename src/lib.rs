@@ -21,7 +21,9 @@ impl fmt::Display for EvalError {
     }
 }
 
-pub fn evaluate(input: &String) -> Result<i32, EvalError> {
+type EvalResult = Result<i32, EvalError>;
+
+pub fn evaluate(input: &String) -> EvalResult {
     let mut input_iter = input.trim().chars().peekable();
 
     while let Some(_) = input_iter.peek() {

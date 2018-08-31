@@ -1,8 +1,8 @@
 mod tokenizers;
 
 use lexer::tokenizers::{
-    number::NumberTokenizer, operator::OperatorTokenizer, whitespace::WhitespaceTokenizer,
-    Tokenizer,
+    number::NumberTokenizer, operator::OperatorTokenizer, parenthesis::ParenthesisTokenizer,
+    whitespace::WhitespaceTokenizer, Tokenizer,
 };
 use std::fmt;
 use std::iter::Peekable;
@@ -44,9 +44,11 @@ type ParseResult = Result<Token, ParseError>;
 pub fn process(input_iter: &mut Peekable<Chars>) -> ParseResult {
     let tokenizers: Vec<Box<Tokenizer>> = vec![
         Box::new(NumberTokenizer),
+        Box::new(ParenthesisTokenizer),
         Box::new(OperatorTokenizer),
         Box::new(WhitespaceTokenizer),
     ];
+
     for tokenizer in &tokenizers {
         if let Ok(token) = tokenizer.process(input_iter) {
             return Ok(token);
