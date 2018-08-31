@@ -9,9 +9,8 @@ impl Tokenizer for WhitespaceTokenizer {
         let mut characters = String::new();
 
         while let Some(&character) = input_iter.peek() {
-            let _ = input_iter.next();
-
             if character.is_whitespace() {
+                let _ = input_iter.next();
                 characters.push(character);
             } else {
                 break;
