@@ -32,6 +32,7 @@ enum Symbol {
     Terminal(Token),
 }
 
+#[derive(Debug)]
 pub struct Parser {
     postfix: Vec<Token>,
     operators: Vec<Token>,
@@ -48,14 +49,12 @@ impl Parser {
     }
 
     pub fn process(&mut self, token: Token) -> bool {
-        println!("{:?}", &token);
         if token == Token::Whitespace {
             return true;
         }
 
         loop {
             if let Some(symbol) = self.symbols.pop() {
-                println!("{:?}", &symbol);
                 match symbol {
                     Symbol::Start => match token {
                         Token::Number(number) => {
@@ -137,34 +136,69 @@ impl Parser {
                         }
                         _ => return false,
                     },
-                    Symbol::Terminal(terminal) => match terminal {
-                        Token::Number(number) => {
-                            return true;
-                        }
-                        Token::LeftParenthesis => {
-                            return true;
-                        }
-                        Token::RightParenthesis => {
-                            return true;
-                        }
-                        Token::Addition => {
-                            return true;
-                        }
-                        Token::Subtraction => {
-                            return true;
-                        }
-                        Token::Multiplication => {
-                            return true;
-                        }
-                        Token::Division => {
-                            return true;
-                        }
-                        _ => return false,
+                    Symbol::Terminal(terminal) => {
+                        println!("{:?}", &terminal);
+                        self.accept_token(terminal);
+                        return true;
                     },
                 }
             } else {
                 return false;
             }
         }
+    }
+
+    fn accept_token(&mut self, token: Token) {
+        match token {
+            Token::Number(number) => {
+                self.postfix.push(token);
+            },
+            Token::LeftParenthesis => {
+                while let Some(top) = self.operators.pop() {
+                    if top != Token::RightParenthesis {
+                        self.postfix.push(top);
+                    } else {
+                        break;
+                    }
+                }
+            },
+            Token::RightParenthesis => {
+                self.operators.push(token);
+            },
+            Token::Addition => {
+                self.accept_operator(token);
+            },
+            Token::Subtraction => {
+                self.accept_operator(token);
+            },
+            Token::Multiplication => {
+                self.accept_operator(token);
+            },
+            Token::Division => {
+                self.accept_operator(token);
+            },
+            Token::Whitespace => {},
+        }
+    }
+
+    fn accept_operator(&mut self, operator: Token) {
+        loop {
+            if self.operators.is_empty() {
+                self.operators.push(operator);
+                break;
+            } else {
+                if self.is_higher_precedence(&operator, self.operators.last().unwrap()) {
+                    self.operators.push(operator);
+                    break;
+                } else {
+                    let top = self.operators.pop().unwrap();
+                    self.postfix.push(top);
+                }
+            }
+        }
+    }
+
+    fn is_higher_precedence(&self, left: &Token, right: &Token) -> bool {
+        left > right
     }
 }

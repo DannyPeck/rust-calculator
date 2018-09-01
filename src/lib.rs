@@ -4,7 +4,7 @@ mod parser;
 use parser::Parser;
 use std::fmt;
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum Token {
     Number(i32),
     LeftParenthesis,
@@ -50,6 +50,8 @@ pub fn evaluate(input: &String) -> EvalResult {
             return Err(EvalError::from("Didn't finish tokenizing"));
         }
     }
+
+    println!("{:?}", parser);
 
     Ok(0)
 }
