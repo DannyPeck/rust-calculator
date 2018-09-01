@@ -68,7 +68,8 @@ fn main() {
     match read_input() {
         Err(err) => print!("{}", err),
         Ok(input) => {
-            let _result = calculator::evaluate(&input);
+            let result = calculator::evaluate(&input);
+            println!("{:?}", result);
         }
     }
 }

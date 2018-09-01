@@ -1,4 +1,5 @@
-use lexer::{tokenizers::Tokenizer, Token};
+use super::Token;
+use lexer::tokenizers::Tokenizer;
 use std::iter::Peekable;
 use std::str::Chars;
 

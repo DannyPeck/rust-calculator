@@ -1,28 +1,20 @@
 mod lexer;
+mod parser;
 
-use lexer::Token;
+use parser::Parser;
 use std::fmt;
 
-#[derive(Debug)]
-pub struct ParseError {
-    error: String,
+#[derive(Debug, Eq, PartialEq)]
+pub enum Token {
+    Number(i32),
+    LeftParenthesis,
+    RightParenthesis,
+    Addition,
+    Subtraction,
+    Multiplication,
+    Division,
+    Whitespace,
 }
-
-impl ParseError {
-    pub fn from(error: &str) -> ParseError {
-        ParseError {
-            error: String::from(error),
-        }
-    }
-}
-
-impl fmt::Display for ParseError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", &self.error)
-    }
-}
-
-type ParseResult = Result<Token, ParseError>;
 
 #[derive(Debug)]
 pub struct EvalError {
@@ -46,11 +38,16 @@ impl fmt::Display for EvalError {
 type EvalResult = Result<i32, EvalError>;
 
 pub fn evaluate(input: &String) -> EvalResult {
+    let mut parser = Parser::new();
     let mut input_iter = input.trim().chars().peekable();
 
     while input_iter.peek().is_some() {
         if let Some(token) = lexer::process(&mut input_iter) {
-            println!("token: {:?}", &token);
+            if !parser.process(token) {
+                return Err(EvalError::from("Parser failed"));
+            }
+        } else if input_iter.peek().is_some() {
+            return Err(EvalError::from("Didn't finish tokenizing"));
         }
     }
 

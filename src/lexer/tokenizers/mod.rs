@@ -1,4 +1,4 @@
-use lexer::Token;
+use super::Token;
 use std::iter::Peekable;
 use std::str::Chars;
 

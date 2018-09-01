@@ -1,5 +1,5 @@
+use super::Token;
 use lexer::tokenizers::Tokenizer;
-use lexer::Token;
 use std::iter::Peekable;
 use std::str::Chars;
 

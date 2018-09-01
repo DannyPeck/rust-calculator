@@ -1,23 +1,12 @@
 mod tokenizers;
 
+use super::Token;
 use lexer::tokenizers::{
     number::NumberTokenizer, operator::OperatorTokenizer, parenthesis::ParenthesisTokenizer,
     whitespace::WhitespaceTokenizer, Tokenizer,
 };
 use std::iter::Peekable;
 use std::str::Chars;
-
-#[derive(Debug)]
-pub enum Token {
-    Number(i32),
-    LeftParenthesis,
-    RightParenthesis,
-    Addition,
-    Subtraction,
-    Multiplication,
-    Division,
-    Whitespace,
-}
 
 pub fn process(input_iter: &mut Peekable<Chars>) -> Option<Token> {
     let tokenizers: Vec<Box<Tokenizer>> = vec![
